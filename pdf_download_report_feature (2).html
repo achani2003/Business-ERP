@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="si" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adceylora Eco Food - ERP V6.0</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN for Visual Analytics & Dashboard Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js CDN for Direct PDF File Download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eefef5',
+                            100: '#d6fce4',
+                            500: '#00e676',
+                            600: '#00c853',
+                            700: '#00a843',
+                            800: '#05682c',
+                            900: '#044c21',
+                            950: '#012a11',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .active-tab {
+            background-color: #00c853 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);
+        }
+        /* Spreadsheet Headers Matching User Image Specs */
+        .excel-proc-header {
+            background-color: #00ff00 !important;
+            color: #000000 !important;
+        }
+        .excel-cyan-header {
+            background-color: #00ffff !important;
+            color: #000000 !important;
+        }
+        .excel-yellow-header {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+        .excel-green-header {
+            background-color: #00ff00 !important;
+            color: #000000 !important;
+        }
+        .excel-orange-header {
+            background-color: #ff9900 !important;
+            color: #000000 !important;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #00c853; border-radius: 9999px; }
+
+        /* PRINT MEDIA STYLES FOR PDF GENERATION */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            #printableReportArea, #printableReportArea * {
+                visibility: visible !important;
+            }
+            #printableReportArea {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 15px !important;
+                background: white !important;
+                color: black !important;
+                display: block !important;
+            }
+            .no-print, header, nav, button, .modal-backdrop {
+                display: none !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                page-break-inside: auto !important;
+                margin-bottom: 15px !important;
+            }
+            tr {
+                page-break-inside: avoid !important;
+                page-break-after: auto !important;
+            }
+            th, td {
+                border: 1px solid #333 !important;
+                padding: 6px !important;
+                font-size: 10px !important;
+            }
+            .excel-proc-header, .excel-cyan-header, .excel-yellow-header, .excel-green-header, .excel-orange-header {
+                background-color: #f1f5f9 !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-brand-600 selection:text-white">
+
+    <!-- PRINT HEADER (VISIBILITY: ONLY PDF PRINT) -->
+    <div class="print-only-header p-4 border-b-2 border-black mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black">ADCEYLORA ECO FOOD</h1>
+                <p class="text-xs">Dehydrated Products & Operations Management System - Official PDF Summary Report</p>
+            </div>
+            <div class="text-right text-xs">
+                <p><strong>Generated Date:</strong> <span id="printReportDate"></span></p>
+                <p><strong>Status:</strong> Confidential Operations Audit</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP SYSTEM HEADER & CONTROL BAR -->
+    <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-950 text-white sticky top-0 z-40 shadow-xl border-b border-brand-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between py-3 md:h-20 gap-3">
+                
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-2xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center text-2xl shadow-inner shrink-0">
+                            🌿
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h1 class="font-black text-base sm:text-lg tracking-tight text-white">ADCEYLORA ECO FOOD</h1>
+                                <span class="bg-brand-500 text-brand-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">ERP v6.0</span>
+                            </div>
+                            <p class="text-[11px] text-brand-100/90 font-medium">Dehydrated Products & Auto Stock Deducting System</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls & Actions -->
+                <div class="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
+                    
+                    <!-- Owner / Staff Toggle -->
+                    <div class="bg-brand-900/90 border border-brand-700/60 p-1 rounded-2xl flex items-center shadow-inner text-xs">
+                        <button onclick="setRole('owner')" id="roleBtn-owner" class="px-3 py-1.5 rounded-xl font-extrabold transition flex items-center space-x-1 bg-brand-600 text-white shadow-md">
+                            <span>👑 Owner Mode</span>
+                        </button>
+                        <button onclick="setRole('staff')" id="roleBtn-staff" class="px-3 py-1.5 rounded-xl font-extrabold text-brand-100 hover:text-white transition">
+                            <span>👷 Staff Mode</span>
+                        </button>
+                    </div>
+
+                    <!-- PDF PRINT REPORT BUTTON -->
+                    <button onclick="openPDFReportModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl border border-indigo-500 text-xs font-black transition flex items-center space-x-1.5 shadow-md" title="Print Preview & Save PDF Report">
+                        <span>📄 PDF Report / Print</span>
+                    </button>
+
+                    <!-- MASTER CLEAR ALL DATA BUTTON -->
+                    <button onclick="confirmMasterWipe()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-xl border border-rose-500 text-xs font-black transition flex items-center space-x-1 shadow-md" title="Clear all data from browser memory">
+                        <span>💥 සියලු දත්ත මකන්න</span>
+                    </button>
+
+                    <!-- SAMPLE DATA RESTORE -->
+                    <button onclick="confirmRestoreSampleData()" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-2 rounded-xl border border-emerald-600 text-xs font-bold transition flex items-center space-x-1">
+                        <span>🔄 Samples</span>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION MODULE TABS -->
+    <nav class="bg-white border-b border-slate-200 sticky top-20 z-30 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 py-2.5 overflow-x-auto no-scrollbar scroll-smooth">
+                
+                <button onclick="setActiveTab('dashboard')" id="tabNav-dashboard" class="tab-nav-btn active-tab flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition shrink-0">
+                    <span>📊 පාලන පුවරුව (Overview)</span>
+                </button>
+
+                <button onclick="setActiveTab('procurement')" id="tabNav-procurement" class="tab-nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition shrink-0">
+                    <span>📥 1. අමුද්‍රව්‍ය පොත (Procurement)</span>
+                </button>
+
+                <button onclick="setActiveTab('variantMatrix')" id="tabNav-variantMatrix" class="tab-nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition shrink-0">
+                    <span>🌿 2. පැකට් Stock පොත (Stock Matrix)</span>
+                </button>
+
+                <button onclick="setActiveTab('dehydration')" id="tabNav-dehydration" class="tab-nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition shrink-0">
+                    <span>☀️ 3. Dehydration Yield (වියළීම)</span>
+                </button>
+
+                <button onclick="setActiveTab('sales')" id="tabNav-sales" class="tab-nav-btn flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-100 transition shrink-0">
+                    <span>🛍️ 4. වෙළඳපොල සහ ආදායම් (Sales)</span>
+                </button>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+        <!-- ================= TAB 1: DASHBOARD OVERVIEW ================= -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-emerald-900 rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print">
+                <div class="space-y-1">
+                    <span class="bg-brand-500/20 text-brand-300 border border-brand-400/30 text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider">Adceylora Live ERP v6.0</span>
+                    <h2 class="text-xl sm:text-2xl font-black">Adceylora Eco Food - මෙහෙයුම් පාලන පුවරුව</h2>
+                    <p class="text-xs text-brand-100/90 max-w-2xl">
+                        වෙළඳපොලට පැකට් විකුණන විට පැකට් Stock එක ස්වයංක්‍රීයව අඩුවේ (Auto Stock Deduct). Sales Order එකක් මකා දැමූ විට පැකට් නැවත Stock එකට එකතු වේ.
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openAddNewProductModal()" class="bg-amber-400 text-slate-900 hover:bg-amber-300 px-4 py-2.5 rounded-xl text-xs font-black shadow transition">
+                        + අලුත් Product එකක්
+                    </button>
+                    <button onclick="openProcurementModal()" class="bg-brand-500 text-brand-950 hover:bg-brand-400 px-4 py-2.5 rounded-xl text-xs font-black shadow transition">
+                        + අමුද්‍රව්‍ය මිලදී ගැනීමක්
+                    </button>
+                    <button onclick="openSalesModal()" class="bg-white text-slate-800 hover:bg-slate-100 px-4 py-2.5 rounded-xl text-xs font-black shadow transition">
+                        🛍️ Market Sale එකක්
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI SUMMARY CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Raw Purchases Logged</span>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">📥</div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiProcCount" class="text-2xl font-black text-slate-800">0 Record</h3>
+                        <p class="text-[11px] text-emerald-700 font-semibold mt-1">අමුද්‍රව්‍ය ගනුදෙනු සංඛ්‍යාව</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Total Powder Packs</span>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">🌿</div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiTotalPacks" class="text-2xl font-black text-slate-800">0 Units</h3>
+                        <p class="text-[11px] text-indigo-700 font-semibold mt-1">තොගයේ ඇති මුළු පැකට් ගණන</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Market Receivables</span>
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">💳</div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiMarketPending" class="text-2xl font-black text-amber-600">Rs. 0.00</h3>
+                        <p class="text-[11px] text-amber-800 font-bold mt-1">වෙළඳපොලෙන් ලැබීමට ඇති මුදල්</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Collected Revenue</span>
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg">💰</div>
+                    </div>
+                    <div class="mt-3">
+                        <h3 id="kpiCollectedRevenue" class="text-2xl font-black text-brand-700">Rs. 0.00</h3>
+                        <p id="kpiRevenueSubtext" class="text-[11px] text-slate-500 mt-1">ලැබුණු මුළු අලෙවි ආදායම</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VISUAL ANALYTICS CHARTS SECTION -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Chart 1: Sales Collections vs Pending Credits (Doughnut) -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div class="flex justify-between items-center border-b pb-3 mb-2">
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm">ආදායම් සහ ලැබීමට ඇති හිඟ මුදල්</h3>
+                            <p class="text-[11px] text-slate-400">Sales Collections vs Pending Balance</p>
+                        </div>
+                        <span class="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-full font-bold">Live</span>
+                    </div>
+                    <div class="relative flex-1 min-h-[220px] flex items-center justify-center">
+                        <canvas id="chartSalesBreakdown"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Stock Inventory Distribution (Bar Chart) -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                    <div class="flex justify-between items-center border-b pb-3 mb-2">
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm">නිෂ්පාදන පැකට් තොග බෙදීම (Stock Comparison)</h3>
+                            <p class="text-[11px] text-slate-400">එක් එක් නිෂ්පාදනයෙහි මුළු පැකට් ගණන්</p>
+                        </div>
+                        <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Real-time</span>
+                    </div>
+                    <div class="relative flex-1 min-h-[220px] flex items-center justify-center">
+                        <canvas id="chartStockDistribution"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Chart 3: Dehydration Yield Analysis & Secondary Highlights -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                    <div class="flex justify-between items-center border-b pb-3 mb-2">
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm">Dehydration Yield Ratio Analysis (වියළීමේ පිරිවැය)</h3>
+                            <p class="text-[11px] text-slate-400">Fresh Input Wt (Kg) vs Dry Output Wt (Kg)</p>
+                        </div>
+                        <span class="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold">Batches</span>
+                    </div>
+                    <div class="relative flex-1 min-h-[200px]">
+                        <canvas id="chartDehydrationYield"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+                    <h3 class="font-extrabold text-slate-800 text-sm border-b pb-2">අතිරේක මෙහෙයුම් සාරාංශය</h3>
+                    
+                    <div class="space-y-2 text-xs">
+                        <div class="p-3 bg-slate-50 rounded-xl border flex justify-between items-center">
+                            <span class="text-slate-600 font-semibold">සැපයුම්කරුවන්ට ගෙවීමට ඇති මුදල්:</span>
+                            <strong id="dashPendingSupplierPayables" class="text-rose-600 font-extrabold text-sm">Rs. 0.00</strong>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border flex justify-between items-center">
+                            <span class="text-slate-600 font-semibold">සක්‍රීය වෙළඳසැල් ගණන:</span>
+                            <strong id="dashActiveOutletsCount" class="text-brand-700 font-extrabold text-sm">0 Stores</strong>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border flex justify-between items-center">
+                            <span class="text-slate-600 font-semibold">නිකුත් කළ Invoices ගණන:</span>
+                            <strong id="dashTotalInvoicesCount" class="text-indigo-700 font-extrabold text-sm">0 Invoices</strong>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-emerald-50 text-emerald-900 border border-emerald-200 rounded-xl text-[11px] font-bold">
+                        💡 Tip: Sales order එකක් දැමූ විට stock automatic අඩුවන අතර chart දෙකම එකවර update වේ.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PRODUCT VARIANT STOCK CARDS -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <div>
+                        <h3 class="font-extrabold text-slate-800 text-base">Finished Product Live Stocks (නිෂ්පාදන පැකට් තොග)</h3>
+                        <p class="text-xs text-slate-500">විකුණුම් සිදුවන විට මෙහි තොග ප්‍රමාණ ස්වයංක්‍රීයව අඩුවේ (Auto Live Deduct)</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openAddNewProductModal()" class="text-xs font-extrabold bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-xl border border-amber-300">
+                            + Add New Product
+                        </button>
+                        <button onclick="setActiveTab('variantMatrix')" class="text-xs font-bold text-brand-600 hover:text-brand-800 underline">
+                            Stock පොතට යන්න →
+                        </button>
+                    </div>
+                </div>
+
+                <div id="dashboardProductCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Dynamic Product Cards -->
+                </div>
+            </div>
+
+            <!-- RECENT SYSTEM ACTIVITY LOGS -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3 no-print">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-extrabold text-slate-800 text-base">පද්ධතියේ මෑතකදී සිදුවූ වෙනස්කම් (Activity Logs)</h3>
+                    <button onclick="clearActivityLogs()" class="text-xs text-rose-600 hover:underline font-bold">Logs මකන්න</button>
+                </div>
+                <div id="dashActivityLog" class="space-y-2 text-xs">
+                    <!-- Dynamic Activity Logs -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 2: RAW MATERIAL PROCUREMENT (IMAGE 1 MATCH) ================= -->
+        <section id="tab-procurement" class="tab-content hidden space-y-6">
+            
+            <!-- Module Toolbar -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Module 01: Raw Material Procurement (අමුද්‍රව්‍ය පොත)</h2>
+                    <p class="text-xs text-slate-500">Image 1 සටහනට අනුකූලව: Date, Supplier Name, Item Name, Fresh Qty, Unit Price, Total Cost, PAID(YES/NO)</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto no-print">
+                    <button onclick="confirmClearProcurementTable()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 transition border border-rose-300">
+                        🧹 මෙම වගුවේ දත්ත මකන්න
+                    </button>
+                    
+                    <button onclick="exportProcurementCSV()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                        📥 Export CSV
+                    </button>
+                    
+                    <button onclick="openProcurementModal()" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-brand-600 hover:bg-brand-700 text-white transition shadow-md">
+                        + අලුත් මිලදී ගැනීමක් එකතු කරන්න
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters & Search -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center no-print">
+                <div class="relative w-full sm:w-80">
+                    <input type="text" id="procSearch" oninput="renderProcurementTable()" placeholder="සැපයුම්කරු හෝ අමුද්‍රව්‍ය සොයන්න..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                    <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                </div>
+
+                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end text-xs">
+                    <span class="font-bold text-slate-500">ගෙවීම් Status එක:</span>
+                    <select id="procFilterPaid" onchange="renderProcurementTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 outline-none">
+                        <option value="ALL">සියලු සටහන් (All)</option>
+                        <option value="YES">YES (ගෙවා ඇත)</option>
+                        <option value="NO">NO (ගෙවීමට ඇත)</option>
+                        <option value="free">free (නොමිලේ ලැබුණු)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SPREADSHEET TABLE MATCHING IMAGE 1 EXACT VISUALS -->
+            <div class="bg-white rounded-2xl border border-slate-300 shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-bold border-collapse">
+                        <thead>
+                            <tr class="excel-proc-header text-black font-black uppercase text-center border-b-2 border-black tracking-wide text-xs">
+                                <th class="p-3 border-r border-black w-28">Date</th>
+                                <th class="p-3 border-r border-black text-left">Supplier Name</th>
+                                <th class="p-3 border-r border-black text-left">Item Name</th>
+                                <th class="p-3 border-r border-black text-left">Fresh Qty (Kg)</th>
+                                <th class="p-3 border-r border-black text-right">Unit Price (Rs/Kg)</th>
+                                <th class="p-3 border-r border-black text-right">Total Cost (Rs)</th>
+                                <th class="p-3 border-r border-black">PAID(YEAS/NO)</th>
+                                <th class="p-3 text-center bg-emerald-300 text-black no-print">ක්‍රියාමාර්ග (Actions)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="procurementTableBody" class="divide-y divide-slate-200 bg-white text-slate-900 font-medium">
+                            <!-- Dynamic Spreadsheet Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 3: PACKET VARIANT MATRIX (IMAGE 2 MATCH) ================= -->
+        <section id="tab-variantMatrix" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Module 02: Powder & Packet Stock Matrix (Image 2 Format)</h2>
+                    <p class="text-xs text-slate-500">සියලුම නිෂ්පාදන පැකට් තොග සහ දිනපතා Packing logs පාලනය</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                    <button onclick="openAddNewProductModal()" class="px-3.5 py-2.5 rounded-xl text-xs font-extrabold bg-amber-100 hover:bg-amber-200 text-amber-900 transition border border-amber-300">
+                        + Add Custom Product
+                    </button>
+                    <button onclick="confirmClearMatrixLogs()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 transition border border-rose-300">
+                        🧹 Logs මකන්න
+                    </button>
+                    <button onclick="confirmClearAllStocks()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-800 transition border border-amber-300">
+                        ⚠️ Stocks 0 කරන්න
+                    </button>
+                    <button onclick="openMatrixLogModal()" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-brand-600 hover:bg-brand-700 text-white transition shadow-md">
+                        + පැකට් Log එකක් එකතු කරන්න
+                    </button>
+                </div>
+            </div>
+
+            <!-- LIVE TOTAL INVENTORY COUNTERS PER VARIANT -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-black text-xs uppercase tracking-wider text-slate-500">Live Available Packet Inventories (වෙළඳපොලට විකුණන විට ස්වයංක්‍රීයව අඩුවේ)</h3>
+                    <span class="text-xs text-slate-400 font-semibold no-print">තොග වෙනස් කිරීමට + / - හෝ ✏️ Set Qty භාවිතා කරන්න</span>
+                </div>
+                <div id="matrixLiveTotalsRow" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Dynamic Stock Cards -->
+                </div>
+            </div>
+
+            <!-- SPREADSHEET TABLE MATCHING IMAGE 2 DYNAMICALLY -->
+            <div class="bg-white rounded-2xl border border-slate-300 shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center text-xs font-bold border-collapse" id="matrixSpreadsheetTable">
+                        <!-- Dynamic Header & Body -->
+                        <thead id="matrixSpreadsheetHeader"></thead>
+                        <tbody id="matrixTableBody" class="divide-y divide-slate-200 bg-white font-medium text-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 4: DEHYDRATION YIELD LOSS ENGINE ================= -->
+        <section id="tab-dehydration" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Module 03: Dehydration Yield Engine (වියළීමේ පිරිවැය සහ අස්වැන්න)</h2>
+                    <p class="text-xs text-slate-500">Fresh Weight vs Dry Output, Yield Ratio (%) සහ Shrinkage Moisture Loss (%) ගණනය කිරීම</p>
+                </div>
+                
+                <div class="flex items-center space-x-2 no-print">
+                    <button onclick="confirmClearDehydrationTable()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 transition border border-rose-300">
+                        🧹 මෙම වගුවේ දත්ත මකන්න
+                    </button>
+                    <button onclick="openDehydrationModal()" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-brand-600 hover:bg-brand-700 text-white transition shadow-md">
+                        + අලුත් Machine Batch එකක්
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dehydration Batches Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-100 border-b border-slate-200 font-extrabold text-slate-600 uppercase">
+                            <tr>
+                                <th class="p-3.5">Batch Code</th>
+                                <th class="p-3.5">Date</th>
+                                <th class="p-3.5">Item Name</th>
+                                <th class="p-3.5 text-right">Fresh Input (Kg)</th>
+                                <th class="p-3.5 text-right">Dry Output (Kg)</th>
+                                <th class="p-3.5 text-center">Yield Ratio (%)</th>
+                                <th class="p-3.5 text-center">Moisture Loss (%)</th>
+                                <th class="p-3.5 text-center">Status</th>
+                                <th class="p-3.5 text-center bg-rose-50 text-rose-800 no-print">ඉවත් කරන්න</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dehydrationTableBody" class="divide-y divide-slate-100">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 5: MARKET SALES & COLLECTIONS ================= -->
+        <section id="tab-sales" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">Module 04: Market Sales & Collections (වෙළඳපොල සහ ආදායම්)</h2>
+                    <p class="text-xs text-slate-500">වෙළඳසැල්වලට දුන් පැකට් (විකුණන විට Stock එක auto deduct වේ), ලැබුණු මුදල් සහ හිඟ මුදල් පාලනය</p>
+                </div>
+                
+                <div class="flex items-center space-x-2 no-print">
+                    <button onclick="confirmClearSalesTable()" class="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-800 transition border border-rose-300">
+                        🧹 මෙම වගුවේ දත්ත මකන්න
+                    </button>
+                    <button onclick="openSalesModal()" class="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-brand-600 hover:bg-brand-700 text-white transition shadow-md">
+                        + Record Market Sale (Auto Deduct Stock)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center no-print">
+                <div class="relative w-full sm:w-80">
+                    <input type="text" id="salesSearch" oninput="renderSalesTable()" placeholder="ෂොප් එකේ නම හෝ Invoice # සොයන්න..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-brand-500 outline-none">
+                    <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                </div>
+
+                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end text-xs">
+                    <span class="font-bold text-slate-500">Payment Status:</span>
+                    <select id="salesFilterStatus" onchange="renderSalesTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 outline-none">
+                        <option value="ALL">සියලුම Sales (All)</option>
+                        <option value="FULLY_PAID">Fully Paid (සම්පූර්ණයෙන්ම ගෙවා ඇත)</option>
+                        <option value="PARTIAL">Partial (කොටසක් ලැබී ඇත)</option>
+                        <option value="PENDING">Pending Credit (ලැබීමට ඇත)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sales Records Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700">
+                        <thead class="bg-slate-100 border-b border-slate-200 font-extrabold text-slate-600 uppercase">
+                            <tr>
+                                <th class="p-3.5">Invoice #</th>
+                                <th class="p-3.5">Date</th>
+                                <th class="p-3.5">Market / Store Name</th>
+                                <th class="p-3.5">Product & Size</th>
+                                <th class="p-3.5 text-right">Packs Sold</th>
+                                <th class="p-3.5 text-right owner-only-col">Total Bill (Rs)</th>
+                                <th class="p-3.5 text-right font-bold text-emerald-700 owner-only-col">Received (Rs)</th>
+                                <th class="p-3.5 text-right font-bold text-amber-700 owner-only-col">Pending Balance (Rs)</th>
+                                <th class="p-3.5 text-center">Status</th>
+                                <th class="p-3.5 text-center bg-rose-50 text-rose-800 no-print">ක්‍රියාමාර්ග</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody" class="divide-y divide-slate-100">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= MODALS SECTION ================= -->
+
+    <!-- MODAL 0: ADD NEW CUSTOM PRODUCT -->
+    <div id="modalAddProduct" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-base">+ Add New Product Category</h3>
+                    <p class="text-xs text-slate-500">අලුත් නිෂ්පාදන වර්ගයක් පද්ධතියට එකතු කරන්න</p>
+                </div>
+                <button onclick="closeAddNewProductModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formAddProduct" onsubmit="saveNewProduct(event)" class="space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Product Name (නම)</label>
+                    <input type="text" id="npName" placeholder="e.g. Cinnamon Powder / Gotukola Powder" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Available Packet Sizes (තෝරන්න)</label>
+                    <div class="grid grid-cols-3 gap-2 font-semibold">
+                        <label class="flex items-center space-x-2 border p-2 rounded-xl bg-slate-50">
+                            <input type="checkbox" name="npSizes" value="50g" checked class="rounded text-brand-600">
+                            <span>50g</span>
+                        </label>
+                        <label class="flex items-center space-x-2 border p-2 rounded-xl bg-slate-50">
+                            <input type="checkbox" name="npSizes" value="100g" checked class="rounded text-brand-600">
+                            <span>100g</span>
+                        </label>
+                        <label class="flex items-center space-x-2 border p-2 rounded-xl bg-slate-50">
+                            <input type="checkbox" name="npSizes" value="250g" class="rounded text-brand-600">
+                            <span>250g</span>
+                        </label>
+                        <label class="flex items-center space-x-2 border p-2 rounded-xl bg-slate-50">
+                            <input type="checkbox" name="npSizes" value="500g" class="rounded text-brand-600">
+                            <span>500g</span>
+                        </label>
+                        <label class="flex items-center space-x-2 border p-2 rounded-xl bg-slate-50">
+                            <input type="checkbox" name="npSizes" value="1kg" checked class="rounded text-brand-600">
+                            <span>1kg</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Custom Size Variant (Optional)</label>
+                    <input type="text" id="npCustomSize" placeholder="e.g. 200g or 2kg" class="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeAddNewProductModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white font-extrabold hover:bg-brand-700 shadow-md">Create Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 0.5: SET CUSTOM QUANTITY FOR PRODUCT VARIANT -->
+    <div id="modalSetQuantity" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-base">✏️ Set / Add Custom Quantity</h3>
+                    <p class="text-xs text-slate-500" id="setQtySubtitle">නිෂ්පාදන පැකට් ප්‍රමාණය කෙලින්ම වෙනස් කරන්න</p>
+                </div>
+                <button onclick="closeSetQuantityModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formSetQuantity" onsubmit="saveCustomQuantity(event)" class="space-y-3.5 text-xs">
+                <input type="hidden" id="sqProdKey">
+                <input type="hidden" id="sqSizeKey">
+
+                <div class="p-3 bg-slate-50 border rounded-2xl">
+                    <div class="text-slate-500">Product: <span id="sqLblProduct" class="font-black text-slate-800"></span></div>
+                    <div class="text-slate-500">Variant: <span id="sqLblSize" class="font-black text-brand-700"></span></div>
+                    <div class="text-slate-500">Current Stock: <span id="sqLblCurrent" class="font-black text-slate-900"></span></div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Action Type</label>
+                    <select id="sqActionType" class="w-full p-3 border border-slate-200 rounded-xl font-bold focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="SET_EXACT">Set Exact Stock Quantity (කෙලින්ම මෙම ගණන දෙන්න)</option>
+                        <option value="ADD_AMOUNT">Add to Current Stock (+ ගණනක් එකතු කරන්න)</option>
+                        <option value="SUB_AMOUNT">Deduct from Current Stock (- ගණනක් අඩු කරන්න)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Quantity Value (පැකට් ගණන)</label>
+                    <input type="number" id="sqAmount" required min="0" placeholder="e.g. 150" class="w-full p-3 border border-slate-200 rounded-xl text-lg font-black text-brand-700 focus:ring-2 focus:ring-brand-500 outline-none">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeSetQuantityModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white font-extrabold hover:bg-brand-700 shadow-md">Update Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 1: PROCUREMENT ADD / EDIT -->
+    <div id="modalProcurement" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 id="procModalTitle" class="font-extrabold text-slate-800 text-base">අමුද්‍රව්‍ය මිලදී ගැනීම් සටහන (Image 1 Format)</h3>
+                    <p class="text-xs text-slate-500">ගොවීන්ගෙන්/සැපයුම්කරුවන්ගෙන් ගත් අමුද්‍රව්‍ය විස්තර</p>
+                </div>
+                <button onclick="closeProcurementModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formProcurement" onsubmit="saveProcurement(event)" class="space-y-3.5 text-xs">
+                <input type="hidden" id="pEditId">
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Date (දිනය)</label>
+                        <input type="text" id="pDate" placeholder="31/10/2026" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Supplier Name (සැපයුම්කරු)</label>
+                        <input type="text" id="pSupplier" placeholder="e.g. Amila ayiyalage gedara" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Item Name (අයිතමයේ නම)</label>
+                    <input type="text" id="pItem" placeholder="e.g. moringa / karapincha / mango" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-semibold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Fresh Qty (Kg හෝ විස්තරය)</label>
+                        <input type="text" id="pQty" oninput="autoCalcProcTotalCost()" placeholder="e.g. 2.5 or pohora bag bagayak" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Unit Price (Rs/Kg හෝ 'free')</label>
+                        <input type="text" id="pUnitPrice" oninput="autoCalcProcTotalCost()" placeholder="e.g. 160 or free" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Total Cost (Rs හෝ 'free')</label>
+                        <input type="text" id="pTotalCost" placeholder="e.g. 400 or free" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">PAID(YEAS/NO)</label>
+                        <select id="pPaidStatus" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                            <option value="free">free (නොමිලේ)</option>
+                            <option value="YES">YES (ගෙවා ඇත)</option>
+                            <option value="NO">NO (ගෙවීමට ඇත)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- DEDUCT FROM REVENUE OPTION -->
+                <div class="p-3 bg-brand-50/70 border border-brand-200 rounded-2xl">
+                    <label class="flex items-center space-x-2 font-bold text-slate-800 cursor-pointer text-xs">
+                        <input type="checkbox" id="pDeductFromRevenue" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                        <span>ව්‍යාපාරික ආදායමෙන් (Sales Revenue) මෙම මුදල අඩු කරන්න (Deduct from Revenue)</span>
+                    </label>
+                    <p class="text-[11px] text-slate-500 mt-1 pl-6">මෙය තෝරා තිබූ විට ගෙවන ලද අමුද්‍රව්‍ය පිරිවැය, Dashboard හි Net Revenue ආදායමෙන් ස්වයංක්‍රීයව අඩුවේ.</p>
+                </div>
+
+                <div class="pt-3 flex justify-between items-center">
+                    <button type="button" onclick="document.getElementById('formMatrixLog').reset()" class="text-rose-600 hover:underline font-bold text-xs">
+                        ❌ Inputs Clear කරන්න
+                    </button>
+
+                    <div class="flex space-x-2">
+                        <button type="button" onclick="closeMatrixLogModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                        <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white font-extrabold hover:bg-brand-700 shadow-md">Add to Stock</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: DEHYDRATION BATCH RECORD -->
+    <div id="modalDehydration" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-base">Dehydration Batch Record</h3>
+                    <p class="text-xs text-slate-500">වියළීමේ ක්‍රියාවලියේ බර ප්‍රමාණයන් සටහන් කරන්න</p>
+                </div>
+                <button onclick="closeDehydrationModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formDehydration" onsubmit="saveDehydration(event)" class="space-y-3.5 text-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Batch Date</label>
+                        <input type="text" id="dDate" placeholder="03/11/2026" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Raw Item</label>
+                        <input type="text" id="dItem" placeholder="e.g. Heen Bovitiya leaves" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Fresh Input Wt (Kg)</label>
+                        <input type="number" step="0.1" id="dFreshInput" oninput="autoCalcDehydrationRatios()" required placeholder="100" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Dry Output Wt (Kg)</label>
+                        <input type="number" step="0.1" id="dDryOutput" oninput="autoCalcDehydrationRatios()" required placeholder="12" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-brand-700">
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-2xl border flex justify-between font-extrabold text-xs">
+                    <span>Dry Yield Ratio: <span id="lblLiveYield" class="text-brand-600">0.0%</span></span>
+                    <span>Moisture Loss: <span id="lblLiveShrink" class="text-amber-600">0.0%</span></span>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Status</label>
+                    <select id="dStatus" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                        <option value="COMPLETED">COMPLETED (අවසන්)</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS (ක්‍රියාත්මක)</option>
+                    </select>
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeDehydrationModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white font-extrabold hover:bg-brand-700 shadow-md">Save Batch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: MARKET SALES INVOICE (AUTO STOCK DEDUCT) -->
+    <div id="modalSales" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-base">Record Market Sale / Invoice</h3>
+                    <p class="text-xs text-slate-500">මෙය සේව් කළ විට අදාළ පැකට් Stock එකෙන් auto අඩුවේ</p>
+                </div>
+                <button onclick="closeSalesModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formSales" onsubmit="saveSales(event)" class="space-y-3.5 text-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Date</label>
+                        <input type="text" id="sDate" placeholder="03/11/2026" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Market / Store Name</label>
+                        <input type="text" id="sMarketName" placeholder="e.g. Keells Super / thilaka" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Select Product Category & Variant</label>
+                    <select id="sProduct" onchange="updateSalesStockAvailabilityLabel()" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-semibold">
+                        <!-- Populated Dynamically -->
+                    </select>
+                    <div id="sStockAvailInfo" class="mt-1 text-[11px] font-extrabold text-emerald-700">Available Stock: --</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Packs Sold Qty (විකුණූ ගණන)</label>
+                        <input type="number" id="sPacksQty" oninput="autoCalcSalesTotals()" min="1" required placeholder="1" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-black text-brand-700 text-base">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Unit Price (Rs/Pack)</label>
+                        <input type="number" id="sUnitPrice" oninput="autoCalcSalesTotals()" required placeholder="350" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Total Bill (Rs)</label>
+                        <input type="text" id="sTotalBill" readonly placeholder="Rs. 0.00" class="w-full p-3 bg-slate-100 font-black text-slate-800 border border-slate-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-slate-700">Amount Received (Rs)</label>
+                        <input type="number" id="sAmountReceived" oninput="autoCalcSalesTotals()" required placeholder="350" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-emerald-700">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Pending Credit Balance (Rs)</label>
+                    <input type="text" id="sPendingBalance" readonly placeholder="Rs. 0.00" class="w-full p-3 bg-amber-50 font-black text-amber-700 border border-amber-200 rounded-xl">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeSalesModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-brand-600 text-white font-extrabold hover:bg-brand-700 shadow-md">Save Invoice & Deduct Stock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 5: RECEIVE CASH PAYMENT -->
+    <div id="modalPaymentUpdate" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-base">Receive Payment Cash</h3>
+                    <p class="text-xs text-slate-500">ලැබුණු මුදල සටහන් කරන්න</p>
+                </div>
+                <button onclick="closePaymentUpdateModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+            </div>
+            
+            <form id="formPaymentUpdate" onsubmit="saveQuickPaymentUpdate(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="payEditId">
+
+                <div class="p-3 bg-slate-50 rounded-2xl border space-y-1">
+                    <div class="text-slate-500">Invoice: <span id="payLblInvoice" class="font-bold text-slate-800"></span></div>
+                    <div class="text-slate-500">Store: <span id="payLblStore" class="font-bold text-slate-800"></span></div>
+                    <div class="text-amber-700 font-extrabold">Current Pending Credit: <span id="payLblPending"></span></div>
+                </div>
+
+                <div>
+                    <label class="block font-bold mb-1 text-slate-700">Cash Received Amount (Rs)</label>
+                    <input type="number" id="payAddAmount" required placeholder="Enter cash amount" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none text-base font-bold text-emerald-700">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closePaymentUpdateModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 text-white font-extrabold hover:bg-emerald-700 shadow-md">Add Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 5.5: DEDICATED PRINT PREVIEW & PDF REPORT MODAL -->
+    <div id="printReportModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] flex flex-col">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-3 gap-3">
+                <div>
+                    <h3 class="font-extrabold text-slate-800 text-lg flex items-center space-x-2">
+                        <span>📄 Executive Report Preview & PDF Export</span>
+                    </h3>
+                    <p class="text-xs text-slate-500">Adceylora Eco Food - සියලුම පද්ධති දත්තයන්හි ඒකාබද්ධ වාර්තාව (Consolidated Summary Report)</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="downloadPDFReport()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition shadow-lg flex items-center space-x-1.5">
+                        <span>📥 Download PDF File</span>
+                    </button>
+                    <button onclick="executePrint()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition shadow-lg flex items-center space-x-1.5">
+                        <span>🖨️ Print / Save as PDF</span>
+                    </button>
+                    <button onclick="closePDFReportModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+                        ❌ Close
+                    </button>
+                </div>
+            </div>
+            
+            <!-- PRINTABLE REPORT CONTENT WRAPPER -->
+            <div class="flex-1 overflow-y-auto p-2">
+                <div id="printableReportArea" class="bg-white p-6 rounded-2xl border border-slate-200 text-slate-800 space-y-6 font-sans">
+                    <!-- Dynamic Consolidated Report Content generated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6: CUSTOM CONFIRMATION MODAL -->
+    <div id="customConfirmModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 no-print">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl mx-auto font-bold">
+                🗑️
+            </div>
+            <div class="space-y-2">
+                <h3 id="confirmModalTitle" class="font-black text-lg text-slate-800">දත්තයන් ඉවත් කිරීම තවුරු කරන්න</h3>
+                <p id="confirmModalMessage" class="text-xs text-slate-600 font-medium">මෙම සටහන පද්ධතියෙන් සම්පූර්ණයෙන්ම මකා දැමීමට ඔබට විශ්වාසද?</p>
+            </div>
+            <div class="flex justify-center space-x-3 pt-2">
+                <button onclick="closeConfirmModal()" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs hover:bg-slate-200">
+                    නැත (Cancel)
+                </button>
+                <button onclick="executeConfirmedAction()" class="px-6 py-2.5 rounded-xl bg-rose-600 text-white font-extrabold text-xs hover:bg-rose-700 shadow-lg shadow-rose-600/30">
+                    ඔව්, මකන්න (Yes, Delete)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none no-print"></div>
+
+    <!-- MAIN SYSTEM LOGIC SCRIPT -->
+    <script>
+        const INITIAL_SAMPLE_STATE = {
+            currentRole: 'owner',
+            
+            // Dynamic Products Dictionary
+            products: {
+                heen_bovitiya: {
+                    id: 'heen_bovitiya',
+                    name: 'Heen Bovitiya Powder',
+                    headerClass: 'excel-green-header',
+                    bgClass: 'bg-emerald-50',
+                    sizes: ['50g', '100g', '1kg'],
+                    stocks: { '50g': 45, '100g': 80, '1kg': 12 }
+                },
+                moringa: {
+                    id: 'moringa',
+                    name: 'Moringa Powder',
+                    headerClass: 'excel-yellow-header',
+                    bgClass: 'bg-yellow-50',
+                    sizes: ['50g', '100g', '1kg'],
+                    stocks: { '50g': 60, '100g': 105, '1kg': 15 }
+                },
+                karapincha: {
+                    id: 'karapincha',
+                    name: 'Karapincha Powder',
+                    headerClass: 'excel-cyan-header',
+                    bgClass: 'bg-cyan-50',
+                    sizes: ['50g', '100g', '1kg'],
+                    stocks: { '50g': 30, '100g': 55, '1kg': 8 }
+                },
+                dehydrated_mango: {
+                    id: 'dehydrated_mango',
+                    name: 'Dehydrated Mango',
+                    headerClass: 'excel-orange-header',
+                    bgClass: 'bg-amber-50',
+                    sizes: ['50g', '100g', '1kg'],
+                    stocks: { '50g': 25, '100g': 90, '1kg': 10 }
+                }
+            },
+
+            // Image 1 Procurement Records
+            procurementList: [
+                { id: 'P-101', date: '31/10/2026', supplier: 'Amila ayiyalage gedara', item: 'moringa', qty: 'pohora bag bagayak', unitPrice: 'free', totalCost: 'free', paid: 'free', deductFromRevenue: false },
+                { id: 'P-102', date: '31/10/2026', supplier: 'Amila ayiyalage gedara', item: 'karapincha', qty: 'pohora bag bagayak', unitPrice: 'free', totalCost: 'free', paid: 'free', deductFromRevenue: false },
+                { id: 'P-103', date: '01/11/2026', supplier: 'Thilaka', item: 'papaya', qty: '2.5', unitPrice: '160', totalCost: '400', paid: 'YES', deductFromRevenue: true },
+                { id: 'P-104', date: '02/11/2026', supplier: 'Matale Orchards', item: 'mango raw', qty: '100', unitPrice: '180', totalCost: '18000', paid: 'NO', deductFromRevenue: true }
+            ],
+
+            // Daily Log Entries for Matrix
+            matrixLogs: [
+                { id: 'ML-1', date: '31/10/2026', prodId: 'heen_bovitiya', size: '100g', qty: 30 },
+                { id: 'ML-2', date: '31/10/2026', prodId: 'moringa', size: '100g', qty: 45 },
+                { id: 'ML-3', date: '01/11/2026', prodId: 'karapincha', size: '50g', qty: 15 },
+                { id: 'ML-4', date: '02/11/2026', prodId: 'dehydrated_mango', size: '100g', qty: 40 }
+            ],
+
+            // Dehydration Batches
+            dehydrationBatches: [
+                { id: 'B-201', code: 'BATCH-20261101-01', date: '01/11/2026', item: 'Heen Bovitiya leaves', freshInput: 50, dryOutput: 6, yield: 12.0, shrinkage: 88.0, status: 'COMPLETED' },
+                { id: 'B-202', code: 'BATCH-20261102-01', date: '02/11/2026', item: 'Fresh TJC Mango', freshInput: 100, dryOutput: 12, yield: 12.0, shrinkage: 88.0, status: 'COMPLETED' }
+            ],
+
+            // Market Sales with Auto Stock Mapping
+            salesOrders: [
+                { id: 'S-401', invoiceNo: 'INV-1001', date: '03/11/2026', marketName: 'thilaka', prodId: 'heen_bovitiya', size: '50g', product: 'Heen Bovitiya Powder 50g', qty: 1, unitPrice: 350, totalBill: 350, amountReceived: 350, pendingBalance: 0, status: 'FULLY_PAID' }
+            ],
+
+            activityLogs: []
+        };
+
+        let appState = loadState();
+        let pendingAction = null;
+
+        // Chart Instance References for Dynamic Updating
+        let chartSalesBreakdownInstance = null;
+        let chartStockDistributionInstance = null;
+        let chartDehydrationYieldInstance = null;
+
+        window.onload = function() {
+            document.getElementById('printReportDate').innerText = new Date().toLocaleDateString('si-LK');
+            renderAll();
+        };
+
+        function setActiveTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-nav-btn').forEach(el => el.classList.remove('active-tab'));
+            
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.remove('hidden');
+            
+            const navBtn = document.getElementById('tabNav-' + tabId);
+            if (navBtn) navBtn.classList.add('active-tab');
+
+            // Re-trigger layout for canvas charts if switching back to dashboard
+            if (tabId === 'dashboard') {
+                renderDashboardCharts();
+            }
+        }
+
+        function renderAll() {
+            renderDashboard();
+            renderProcurementTable();
+            renderVariantMatrixTable();
+            renderDehydrationTable();
+            renderSalesTable();
+            renderActivityLogs();
+            saveState();
+        }
+
+        function renderDashboard() {
+            const isOwner = appState.currentRole === 'owner';
+            
+            document.getElementById('kpiProcCount').innerText = appState.procurementList.length + ' Records';
+            
+            let totalPacks = 0;
+            Object.values(appState.products).forEach(p => {
+                p.sizes.forEach(sz => totalPacks += (p.stocks[sz] || 0));
+            });
+            document.getElementById('kpiTotalPacks').innerText = totalPacks + ' Units';
+            
+            const pendingSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.pendingBalance || 0), 0);
+            const collectedSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.amountReceived || 0), 0);
+            
+            // Calculate Raw Material Expenses Deducted from Sales Revenue
+            let rmRevenueDeducted = 0;
+            appState.procurementList.forEach(p => {
+                if (p.paid === 'YES' && p.deductFromRevenue !== false) {
+                    const cost = parseFloat(p.totalCost);
+                    if (!isNaN(cost)) rmRevenueDeducted += cost;
+                }
+            });
+
+            const netCollectedRevenue = Math.max(0, collectedSum - rmRevenueDeducted);
+
+            document.getElementById('kpiMarketPending').innerText = isOwner ? 'Rs. ' + pendingSum.toLocaleString('en-US', {minimumFractionDigits: 2}) : '🔒 Restricted';
+            document.getElementById('kpiCollectedRevenue').innerText = isOwner ? 'Rs. ' + netCollectedRevenue.toLocaleString('en-US', {minimumFractionDigits: 2}) : '🔒 Restricted';
+            
+            const subTextEl = document.getElementById('kpiRevenueSubtext');
+            if (subTextEl) {
+                subTextEl.innerHTML = isOwner ? `Gross: Rs. ${collectedSum.toFixed(2)} | RM Exp: -Rs. ${rmRevenueDeducted.toFixed(2)}` : 'ලැබුණු ශුද්ධ අලෙවි ආදායම';
+            }
+
+            // Secondary Metrics
+            let pendingSupplierPay = 0;
+            appState.procurementList.forEach(p => {
+                if (p.paid === 'NO') {
+                    const c = parseFloat(p.totalCost);
+                    if (!isNaN(c)) pendingSupplierPay += c;
+                }
+            });
+            document.getElementById('dashPendingSupplierPayables').innerText = isOwner ? 'Rs. ' + pendingSupplierPay.toLocaleString('en-US', {minimumFractionDigits: 2}) : '🔒 Restricted';
+            
+            const uniqueOutlets = new Set(appState.salesOrders.map(s => s.marketName.toLowerCase().trim()));
+            document.getElementById('dashActiveOutletsCount').innerText = uniqueOutlets.size + ' Outlets';
+            document.getElementById('dashTotalInvoicesCount').innerText = appState.salesOrders.length + ' Invoices';
+
+            const cardsBox = document.getElementById('dashboardProductCards');
+            if (cardsBox) {
+                cardsBox.innerHTML = '';
+                Object.keys(appState.products).forEach(key => {
+                    const p = appState.products[key];
+                    let sizeLines = p.sizes.map(sz => `<div class="flex justify-between border-b border-slate-100 py-1"><span>${sz}:</span> <strong class="text-brand-700 font-extrabold">${p.stocks[sz] || 0}</strong></div>`).join('');
+                    
+                    const div = document.createElement('div');
+                    div.className = "p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between";
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-extrabold text-xs uppercase text-slate-800">${p.name}</h4>
+                            <button onclick="confirmDeleteProduct('${key}')" class="text-[10px] text-rose-600 font-bold hover:underline">Delete</button>
+                        </div>
+                        <div class="text-xs space-y-1">${sizeLines}</div>
+                    `;
+                    cardsBox.appendChild(div);
+                });
+            }
+
+            renderDashboardCharts();
+        }
+
+        // RENDER VISUAL CHARTS USING CHART.JS
+        function renderDashboardCharts() {
+            if (typeof Chart === 'undefined') return;
+
+            const isOwner = appState.currentRole === 'owner';
+
+            // 1. Chart: Sales Collections vs RM Expenses vs Pending Credits
+            const collectedSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.amountReceived || 0), 0);
+            const pendingSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.pendingBalance || 0), 0);
+            
+            let rmRevenueDeducted = 0;
+            appState.procurementList.forEach(p => {
+                if (p.paid === 'YES' && p.deductFromRevenue !== false) {
+                    const cost = parseFloat(p.totalCost);
+                    if (!isNaN(cost)) rmRevenueDeducted += cost;
+                }
+            });
+
+            const netRevenue = Math.max(0, collectedSum - rmRevenueDeducted);
+
+            const ctxSales = document.getElementById('chartSalesBreakdown')?.getContext('2d');
+            if (ctxSales) {
+                if (chartSalesBreakdownInstance) chartSalesBreakdownInstance.destroy();
+                chartSalesBreakdownInstance = new Chart(ctxSales, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Net Revenue (ශුද්ධ ආදායම)', 'RM Expenses (අමුද්‍රව්‍ය පිරිවැය)', 'Pending Credits (ලැබීමට ඇති)'],
+                        datasets: [{
+                            data: isOwner ? [netRevenue, rmRevenueDeducted, pendingSum] : [1, 0, 0],
+                            backgroundColor: ['#00c853', '#f43f5e', '#f59e0b'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { size: 10, family: 'Inter' } } }
+                        }
+                    }
+                });
+            }
+
+            // 2. Chart: Stock Distribution by Product Category (Bar)
+            const prodLabels = [];
+            const prodStockValues = [];
+            const bgColors = ['#00c853', '#eab308', '#06b6d4', '#f97316', '#6366f1', '#ec4899'];
+
+            Object.values(appState.products).forEach(p => {
+                prodLabels.push(p.name);
+                let total = 0;
+                p.sizes.forEach(sz => total += (p.stocks[sz] || 0));
+                prodStockValues.push(total);
+            });
+
+            const ctxStock = document.getElementById('chartStockDistribution')?.getContext('2d');
+            if (ctxStock) {
+                if (chartStockDistributionInstance) chartStockDistributionInstance.destroy();
+                chartStockDistributionInstance = new Chart(ctxStock, {
+                    type: 'bar',
+                    data: {
+                        labels: prodLabels,
+                        datasets: [{
+                            label: 'Total Available Packs',
+                            data: prodStockValues,
+                            backgroundColor: bgColors.slice(0, prodLabels.length),
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { font: { family: 'Inter', size: 10 } } },
+                            x: { ticks: { font: { family: 'Inter', size: 10 } } }
+                        }
+                    }
+                });
+            }
+
+            // 3. Chart: Dehydration Batches Yield (Fresh Input vs Dry Output)
+            const batchLabels = appState.dehydrationBatches.slice(0, 5).map(b => b.code);
+            const freshValues = appState.dehydrationBatches.slice(0, 5).map(b => b.freshInput);
+            const dryValues = appState.dehydrationBatches.slice(0, 5).map(b => b.dryOutput);
+
+            const ctxYield = document.getElementById('chartDehydrationYield')?.getContext('2d');
+            if (ctxYield) {
+                if (chartDehydrationYieldInstance) chartDehydrationYieldInstance.destroy();
+                chartDehydrationYieldInstance = new Chart(ctxYield, {
+                    type: 'bar',
+                    data: {
+                        labels: batchLabels.length > 0 ? batchLabels : ['No Batches'],
+                        datasets: [
+                            { label: 'Fresh Input (Kg)', data: freshValues.length > 0 ? freshValues : [0], backgroundColor: '#3b82f6', borderRadius: 6 },
+                            { label: 'Dry Output (Kg)', data: dryValues.length > 0 ? dryValues : [0], backgroundColor: '#10b981', borderRadius: 6 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top', labels: { font: { size: 10, family: 'Inter' } } }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { font: { family: 'Inter', size: 10 } } },
+                            x: { ticks: { font: { family: 'Inter', size: 10 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // GENERATE PRINTABLE CONSOLIDATED PDF REPORT HTML
+        function generatePrintableReportHTML() {
+            const container = document.getElementById('printableReportArea');
+            if (!container) return;
+
+            const isOwner = appState.currentRole === 'owner';
+            const dateStr = new Date().toLocaleDateString('si-LK') + ' ' + new Date().toLocaleTimeString();
+
+            // Calculate Metrics
+            const totalProcurement = appState.procurementList.length;
+            let totalProcCost = 0;
+            appState.procurementList.forEach(p => {
+                const c = parseFloat(p.totalCost);
+                if (!isNaN(c)) totalProcCost += c;
+            });
+
+            let totalPacks = 0;
+            Object.values(appState.products).forEach(p => {
+                p.sizes.forEach(sz => totalPacks += (p.stocks[sz] || 0));
+            });
+
+            const pendingSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.pendingBalance || 0), 0);
+            const collectedSum = appState.salesOrders.reduce((sum, s) => sum + parseFloat(s.amountReceived || 0), 0);
+
+            // Procurement rows
+            let procRowsHTML = appState.procurementList.map(r => `
+                <tr>
+                    <td style="padding:6px; border:1px solid #ccc; font-weight:bold;">${r.date}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${r.supplier}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${r.item}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${r.qty}</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:right;">${isOwner ? r.unitPrice : '🔒'}</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:right; font-weight:bold;">${isOwner ? r.totalCost : '🔒'}</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:center;">${r.paid}</td>
+                </tr>
+            `).join('');
+
+            // Sales rows
+            let salesRowsHTML = appState.salesOrders.map(s => `
+                <tr>
+                    <td style="padding:6px; border:1px solid #ccc; font-weight:bold;">${s.invoiceNo}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${s.date}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${s.marketName}</td>
+                    <td style="padding:6px; border:1px solid #ccc;">${s.product} (${s.qty} packs)</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:right;">${isOwner ? 'Rs. ' + s.totalBill.toFixed(2) : '🔒'}</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:right; font-weight:bold; color:green;">${isOwner ? 'Rs. ' + s.amountReceived.toFixed(2) : '🔒'}</td>
+                    <td style="padding:6px; border:1px solid #ccc; text-align:right; font-weight:bold; color:orange;">${isOwner ? 'Rs. ' + s.pendingBalance.toFixed(2) : '🔒'}</td>
+                </tr>
+            `).join('');
+
+            // Products summary
+            let prodSummaryHTML = Object.values(appState.products).map(p => {
+                let szList = p.sizes.map(sz => `${sz}: <strong>${p.stocks[sz] || 0}</strong>`).join(' | ');
+                return `<div style="margin-bottom:4px;">• <strong>${p.name}:</strong> ${szList}</div>`;
+            }).join('');
+
+            container.innerHTML = `
+                <div style="font-family: Inter, sans-serif;">
+                    <div style="border-bottom:2px solid #00c853; padding-bottom:10px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h2 style="font-size:20px; font-weight:900; color:#044c21; margin:0;">ADCEYLORA ECO FOOD</h2>
+                            <p style="font-size:12px; color:#555; margin:2px 0 0 0;">Dehydrated Products & Operations Management System Report</p>
+                        </div>
+                        <div style="text-align:right; font-size:11px;">
+                            <p style="margin:0;"><strong>Report Date:</strong> ${dateStr}</p>
+                            <p style="margin:2px 0 0 0;"><strong>Role Mode:</strong> ${appState.currentRole.toUpperCase()}</p>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary Box -->
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:10px; margin-bottom:20px; font-size:11px; display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+                        <div>
+                            <span style="color:#64748b; font-weight:bold; display:block;">RAW PURCHASES LOGGED</span>
+                            <span style="font-size:16px; font-weight:900;">${totalProcurement} Records</span>
+                        </div>
+                        <div>
+                            <span style="color:#64748b; font-weight:bold; display:block;">TOTAL PACKET STOCK</span>
+                            <span style="font-size:16px; font-weight:900; color:#3b82f6;">${totalPacks} Packs</span>
+                        </div>
+                        <div>
+                            <span style="color:#64748b; font-weight:bold; display:block;">COLLECTED REVENUE</span>
+                            <span style="font-size:16px; font-weight:900; color:#00c853;">${isOwner ? 'Rs. ' + collectedSum.toFixed(2) : '🔒'}</span>
+                        </div>
+                        <div>
+                            <span style="color:#64748b; font-weight:bold; display:block;">PENDING MARKET CREDITS</span>
+                            <span style="font-size:16px; font-weight:900; color:#f59e0b;">${isOwner ? 'Rs. ' + pendingSum.toFixed(2) : '🔒'}</span>
+                        </div>
+                    </div>
+
+                    <!-- Products Stocks Breakdown -->
+                    <div style="margin-bottom:20px;">
+                        <h4 style="font-size:13px; font-weight:800; border-bottom:1px solid #ccc; padding-bottom:4px; margin-bottom:8px;">📦 Live Finished Packet Inventories Summary</h4>
+                        <div style="font-size:11px;">
+                            ${prodSummaryHTML}
+                        </div>
+                    </div>
+
+                    <!-- Module 1 Procurement Table -->
+                    <div style="margin-bottom:20px;">
+                        <h4 style="font-size:13px; font-weight:800; border-bottom:1px solid #ccc; padding-bottom:4px; margin-bottom:8px;">📥 Raw Material Procurement Log (Image 1 Format)</h4>
+                        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                            <thead>
+                                <tr style="background:#e2e8f0; font-weight:bold;">
+                                    <th style="padding:6px; border:1px solid #ccc;">Date</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:left;">Supplier Name</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:left;">Item Name</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:left;">Fresh Qty</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:right;">Unit Price</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:right;">Total Cost</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:center;">Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${procRowsHTML || '<tr><td colspan="7" style="text-align:center; padding:10px;">No Procurement Records</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Module 4 Market Sales Table -->
+                    <div style="margin-bottom:20px;">
+                        <h4 style="font-size:13px; font-weight:800; border-bottom:1px solid #ccc; padding-bottom:4px; margin-bottom:8px;">🛍️ Market Sales & Collections Log</h4>
+                        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                            <thead>
+                                <tr style="background:#e2e8f0; font-weight:bold;">
+                                    <th style="padding:6px; border:1px solid #ccc;">Invoice #</th>
+                                    <th style="padding:6px; border:1px solid #ccc;">Date</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:left;">Store Name</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:left;">Product & Size</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:right;">Total Bill</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:right;">Received</th>
+                                    <th style="padding:6px; border:1px solid #ccc; text-align:right;">Pending Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${salesRowsHTML || '<tr><td colspan="7" style="text-align:center; padding:10px;">No Sales Records</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('adceylora_erp_v60_state');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) { console.error("Error loading state", e); }
+            }
+            return JSON.parse(JSON.stringify(INITIAL_SAMPLE_STATE));
+        }
+
+        function saveState() {
+            localStorage.setItem('adceylora_erp_v60_state', JSON.stringify(appState));
+        }
+
+        // CONFIRMATION POPUP SYSTEM
+        function requestConfirmation(title, message, callback) {
+            document.getElementById('confirmModalTitle').innerText = title;
+            document.getElementById('confirmModalMessage').innerText = message;
+            pendingAction = callback;
+            document.getElementById('customConfirmModal').classList.remove('hidden');
+        }
+
+        function executeConfirmedAction() {
+            if (typeof pendingAction === 'function') {
+                pendingAction();
+            }
+            closeConfirmModal();
+        }
+
+        function closeConfirmModal() {
+            pendingAction = null;
+            document.getElementById('customConfirmModal').classList.add('hidden');
+        }
+
+        // ROLE SWITCHER
+        function setRole(role) {
+            appState.currentRole = role;
+            const ownerBtn = document.getElementById('roleBtn-owner');
+            const staffBtn = document.getElementById('roleBtn-staff');
+
+            if (role === 'owner') {
+                ownerBtn.className = 'px-3 py-1.5 rounded-xl font-extrabold transition flex items-center space-x-1 bg-brand-600 text-white shadow-md';
+                staffBtn.className = 'px-3 py-1.5 rounded-xl font-extrabold text-brand-100 hover:text-white transition';
+                showToast("Owner Mode (Financial details visible)", "info");
+            } else {
+                staffBtn.className = 'px-3 py-1.5 rounded-xl font-extrabold transition flex items-center space-x-1 bg-brand-600 text-white shadow-md';
+                ownerBtn.className = 'px-3 py-1.5 rounded-xl font-extrabold text-brand-100 hover:text-white transition';
+                showToast("Staff Mode (Financial details restricted)", "info");
+            }
+
+            renderAll();
+        }
+
+        // PRINT REPORT MODAL SYSTEM
+        function openPDFReportModal() {
+            generatePrintableReportHTML();
+            document.getElementById('printReportModal').classList.remove('hidden');
+        }
+
+        function closePDFReportModal() {
+            document.getElementById('printReportModal').classList.add('hidden');
+        }
+
+        function executePrint() {
+            window.print();
+        }
+
+        function triggerPDFPrint() { openPDFReportModal(); }
+
+        function downloadPDFReport() {
+            const element = document.getElementById('printableReportArea');
+            if (!element) return;
+            
+            const opt = {
+                margin:       [8, 8, 8, 8],
+                filename:     `Adceylora_Operations_Report_${new Date().toISOString().slice(0,10)}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            showToast("PDF වාර්තාව සාදමින් පවතී...", "info");
+
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().set(opt).from(element).save().then(() => {
+                    showToast("PDF වාර්තාව සාර්ථකව Download විය!", "success");
+                }).catch(err => {
+                    console.error("PDF generation error:", err);
+                    showToast("PDF Download කිරීමේදී දෝෂයක් විය. Print / Save as PDF භාවිතා කරන්න.", "warning");
+                });
+            } else {
+                executePrint();
+            }
+        }
+
+        function confirmDeleteProduct(prodKey) {
+            const p = appState.products[prodKey];
+            requestConfirmation(
+                "නිෂ්පාදන කාණ්ඩය ඉවත් කිරීම",
+                `'${p ? p.name : ''}' නිෂ්පාදනය පද්ධතියෙන් ඉවත් කිරීමට ඔබට විශ්වාසද?`,
+                function() {
+                    delete appState.products[prodKey];
+                    pushLog(`Removed product category ${prodKey}`);
+                    renderAll();
+                    showToast("නිෂ්පාදනය ඉවත් කරන ලදී!", "warning");
+                }
+            );
+        }
+
+        function openAddNewProductModal() {
+            document.getElementById('formAddProduct').reset();
+            document.getElementById('modalAddProduct').classList.remove('hidden');
+        }
+
+        function closeAddNewProductModal() {
+            document.getElementById('modalAddProduct').classList.add('hidden');
+        }
+
+        function saveNewProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('npName').value.trim();
+            if (!name) return;
+
+            const checkedSizes = Array.from(document.querySelectorAll('input[name="npSizes"]:checked')).map(cb => cb.value);
+            const customSize = document.getElementById('npCustomSize').value.trim();
+            if (customSize && !checkedSizes.includes(customSize)) {
+                checkedSizes.push(customSize);
+            }
+
+            if (checkedSizes.length === 0) {
+                showToast("කරුණාකර අවම වශයෙන් පැකට් ප්‍රමාණයක් තෝරන්න!", "warning");
+                return;
+            }
+
+            const key = name.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
+            const initialStocks = {};
+            checkedSizes.forEach(sz => initialStocks[sz] = 0);
+
+            appState.products[key] = {
+                id: key,
+                name: name,
+                headerClass: 'excel-green-header',
+                bgClass: 'bg-emerald-50',
+                sizes: checkedSizes,
+                stocks: initialStocks
+            };
+
+            pushLog(`Added new product category ${name}`);
+            showToast("අලුත් නිෂ්පාදනය පද්ධතියට එකතු කරන ලදී!", "success");
+            closeAddNewProductModal();
+            renderAll();
+        }
+
+        function openSetQuantityModal(prodKey, sizeKey) {
+            const p = appState.products[prodKey];
+            if (!p) return;
+
+            document.getElementById('sqProdKey').value = prodKey;
+            document.getElementById('sqSizeKey').value = sizeKey;
+            document.getElementById('sqLblProduct').innerText = p.name;
+            document.getElementById('sqLblSize').innerText = sizeKey;
+            document.getElementById('sqLblCurrent').innerText = (p.stocks[sizeKey] || 0) + ' Packs';
+            document.getElementById('sqAmount').value = p.stocks[sizeKey] || 0;
+
+            document.getElementById('modalSetQuantity').classList.remove('hidden');
+        }
+
+        function closeSetQuantityModal() {
+            document.getElementById('modalSetQuantity').classList.add('hidden');
+        }
+
+        function saveCustomQuantity(e) {
+            e.preventDefault();
+            const prodKey = document.getElementById('sqProdKey').value;
+            const sizeKey = document.getElementById('sqSizeKey').value;
+            const actionType = document.getElementById('sqActionType').value;
+            const amount = parseInt(document.getElementById('sqAmount').value) || 0;
+
+            const p = appState.products[prodKey];
+            if (p) {
+                const current = p.stocks[sizeKey] || 0;
+                if (actionType === 'SET_EXACT') {
+                    p.stocks[sizeKey] = Math.max(0, amount);
+                } else if (actionType === 'ADD_AMOUNT') {
+                    p.stocks[sizeKey] = current + amount;
+                } else if (actionType === 'SUB_AMOUNT') {
+                    p.stocks[sizeKey] = Math.max(0, current - amount);
+                }
+                pushLog(`Updated stock for ${p.name} (${sizeKey})`);
+                showToast("Stock ප්‍රමාණය වෙනස් කරන ලදී!", "success");
+            }
+
+            closeSetQuantityModal();
+            renderAll();
+        }
+
+        function confirmMasterWipe() {
+            requestConfirmation(
+                "සියලුම දත්ත මුල සිටම මකා දැමීම (Master Reset)",
+                "පද්ධතියේ ඇති සියලුම අමුද්‍රව්‍ය, තොග, Batches සහ Sales දත්ත මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.procurementList = [];
+                    appState.matrixLogs = [];
+                    appState.dehydrationBatches = [];
+                    appState.salesOrders = [];
+                    Object.keys(appState.products).forEach(k => {
+                        appState.products[k].sizes.forEach(sz => appState.products[k].stocks[sz] = 0);
+                    });
+                    appState.activityLogs = [];
+                    renderAll();
+                    showToast("සියලුම දත්ත මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmRestoreSampleData() {
+            requestConfirmation(
+                "ආදර්ශ දත්ත (Sample Data) නැවත ලබාගැනීම",
+                "පද්ධතිය පරීක්ෂා කිරීම සඳහා ආදර්ශ දත්ත නැවත ලබාගැනීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState = JSON.parse(JSON.stringify(INITIAL_SAMPLE_STATE));
+                    renderAll();
+                    showToast("ආදර්ශ දත්ත නැවත ලබාගන්නා ලදී!", "success");
+                }
+            );
+        }
+
+        // ================= TAB 2: RAW PROCUREMENT (IMAGE 1) =================
+        function renderProcurementTable() {
+            const tbody = document.getElementById('procurementTableBody');
+            tbody.innerHTML = '';
+
+            const search = document.getElementById('procSearch') ? document.getElementById('procSearch').value.toLowerCase() : '';
+            const paidFilter = document.getElementById('procFilterPaid') ? document.getElementById('procFilterPaid').value : 'ALL';
+
+            const filtered = appState.procurementList.filter(item => {
+                const matchesSearch = item.supplier.toLowerCase().includes(search) || item.item.toLowerCase().includes(search);
+                const matchesPaid = paidFilter === 'ALL' || item.paid === paidFilter;
+                return matchesSearch && matchesPaid;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="p-8 text-center text-slate-400 font-bold">
+                            දත්ත කිසිවක් නැත. (No Records Found)<br>
+                            <button onclick="openProcurementModal()" class="mt-2 text-brand-600 hover:underline text-xs no-print">+ අලුත් අමුද්‍රව්‍ය මිලදී ගැනීමක් එකතු කරන්න</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(row => {
+                let badgeStyle = 'bg-slate-100 text-slate-800 border border-slate-300';
+                if (row.paid === 'YES') badgeStyle = 'bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold';
+                if (row.paid === 'NO') badgeStyle = 'bg-rose-100 text-rose-800 border border-rose-300 font-extrabold';
+                if (row.paid === 'free') badgeStyle = 'bg-cyan-100 text-cyan-800 border border-cyan-300 font-extrabold';
+
+                const isOwner = appState.currentRole === 'owner';
+                const unitPriceDisplay = isOwner ? row.unitPrice : '🔒 Restricted';
+                const totalCostDisplay = isOwner ? row.totalCost : '🔒 Restricted';
+                const isDeducted = (row.paid === 'YES' && row.deductFromRevenue !== false);
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-200 text-xs";
+                tr.innerHTML = `
+                    <td class="p-3 text-center border-r border-slate-200 font-bold">${row.date}</td>
+                    <td class="p-3 border-r border-slate-200 font-bold text-slate-800">${row.supplier}</td>
+                    <td class="p-3 border-r border-slate-200 font-semibold text-slate-700">${row.item}</td>
+                    <td class="p-3 border-r border-slate-200 font-bold">${row.qty}</td>
+                    <td class="p-3 border-r border-slate-200 text-right font-semibold">${unitPriceDisplay}</td>
+                    <td class="p-3 border-r border-slate-200 text-right font-black text-brand-700">${totalCostDisplay}</td>
+                    <td class="p-3 border-r border-slate-200 text-center space-y-1">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] ${badgeStyle}">${row.paid}</span>
+                        ${isDeducted ? '<span class="block text-[9px] font-bold text-rose-600">📉 Deducted</span>' : ''}
+                    </td>
+                    <td class="p-3 text-center space-x-1 no-print">
+                        <button onclick="openEditProcurement('${row.id}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs" title="Edit">✏️</button>
+                        <button onclick="confirmDeleteProcurement('${row.id}')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-extrabold rounded-lg text-xs shadow-sm" title="Delete Row">🗑️ ඉවත් කරන්න</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function confirmDeleteProcurement(id) {
+            const item = appState.procurementList.find(p => p.id === id);
+            requestConfirmation(
+                "අමුද්‍රව්‍ය සටහන ඉවත් කිරීම",
+                `'${item ? item.item : ''}' (${item ? item.supplier : ''}) සටහන මකා දැමීමට ඔබට විශ්වාසද?`,
+                function() {
+                    appState.procurementList = appState.procurementList.filter(p => p.id !== id);
+                    pushLog("Deleted raw procurement item");
+                    renderAll();
+                    showToast("අමුද්‍රව්‍ය සටහන මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmClearProcurementTable() {
+            requestConfirmation(
+                "අමුද්‍රව්‍ය පොතේ සියලුම දත්ත මකා දැමීම",
+                "අමුද්‍රව්‍ය මිලදී ගැනීමේ වගුවේ ඇති සියලුම Records මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.procurementList = [];
+                    pushLog("Cleared raw procurement table");
+                    renderAll();
+                    showToast("අමුද්‍රව්‍ය වගුවේ දත්ත මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function openProcurementModal() {
+            document.getElementById('pEditId').value = '';
+            document.getElementById('procModalTitle').innerText = 'අමුද්‍රව්‍ය මිලදී ගැනීම් සටහන (Image 1 Format)';
+            document.getElementById('formProcurement').reset();
+            document.getElementById('pDate').value = '31/10/2026';
+            document.getElementById('pDeductFromRevenue').checked = true;
+            document.getElementById('modalProcurement').classList.remove('hidden');
+        }
+
+        function openEditProcurement(id) {
+            const item = appState.procurementList.find(p => p.id === id);
+            if (!item) return;
+
+            document.getElementById('pEditId').value = item.id;
+            document.getElementById('procModalTitle').innerText = 'Edit Purchase Record (' + item.supplier + ')';
+            document.getElementById('pDate').value = item.date;
+            document.getElementById('pSupplier').value = item.supplier;
+            document.getElementById('pItem').value = item.item;
+            document.getElementById('pQty').value = item.qty;
+            document.getElementById('pUnitPrice').value = item.unitPrice;
+            document.getElementById('pTotalCost').value = item.totalCost;
+            document.getElementById('pPaidStatus').value = item.paid;
+            document.getElementById('pDeductFromRevenue').checked = item.deductFromRevenue !== false;
+
+            document.getElementById('modalProcurement').classList.remove('hidden');
+        }
+
+        function closeProcurementModal() { document.getElementById('modalProcurement').classList.add('hidden'); }
+
+        function autoCalcProcTotalCost() {
+            const qtyVal = document.getElementById('pQty').value.trim();
+            const unitVal = document.getElementById('pUnitPrice').value.trim();
+            const totalCostInput = document.getElementById('pTotalCost');
+
+            if (qtyVal.toLowerCase() === 'free' || unitVal.toLowerCase() === 'free') {
+                totalCostInput.value = 'free';
+                return;
+            }
+
+            const qty = parseFloat(qtyVal);
+            const unitPrice = parseFloat(unitVal);
+
+            if (!isNaN(qty) && !isNaN(unitPrice)) {
+                const total = qty * unitPrice;
+                totalCostInput.value = Number.isInteger(total) ? total.toString() : parseFloat(total.toFixed(2)).toString();
+            }
+        }
+
+        function saveProcurement(e) {
+            e.preventDefault();
+            const editId = document.getElementById('pEditId').value;
+            const date = document.getElementById('pDate').value;
+            const supplier = document.getElementById('pSupplier').value;
+            const item = document.getElementById('pItem').value;
+            const qty = document.getElementById('pQty').value;
+            const unitPrice = document.getElementById('pUnitPrice').value;
+            const totalCost = document.getElementById('pTotalCost').value;
+            const paid = document.getElementById('pPaidStatus').value;
+            const deductFromRevenue = document.getElementById('pDeductFromRevenue').checked;
+
+            if (editId) {
+                const idx = appState.procurementList.findIndex(p => p.id === editId);
+                if (idx !== -1) {
+                    appState.procurementList[idx] = { id: editId, date, supplier, item, qty, unitPrice, totalCost, paid, deductFromRevenue };
+                    pushLog(`Updated procurement record (${supplier})`);
+                    showToast("අමුද්‍රව්‍ය සටහන වෙනස් කරන ලදී!", "success");
+                }
+            } else {
+                const newId = 'P-' + Date.now();
+                appState.procurementList.unshift({ id: newId, date, supplier, item, qty, unitPrice, totalCost, paid, deductFromRevenue });
+                pushLog(`Added raw purchase (${item} from ${supplier})`);
+                showToast("අලුත් අමුද්‍රව්‍ය සටහන එකතු විය!", "success");
+            }
+
+            closeProcurementModal();
+            renderAll();
+        }
+
+        // ================= TAB 3: PACKET VARIANT MATRIX (IMAGE 2 DYNAMIC) =================
+        function renderVariantMatrixTable() {
+            const totalsBox = document.getElementById('matrixLiveTotalsRow');
+            totalsBox.innerHTML = '';
+            const products = appState.products;
+
+            Object.keys(products).forEach(key => {
+                const p = products[key];
+                
+                let sizeBoxesHTML = '';
+                p.sizes.forEach(sz => {
+                    sizeBoxesHTML += `
+                        <div class="bg-white p-2 rounded-xl border shadow-sm flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block font-bold">${sz}</span>
+                                <span class="text-base font-black text-brand-700">${p.stocks[sz] || 0}</span>
+                            </div>
+                            <div class="flex justify-center items-center space-x-1 mt-1.5 no-print">
+                                <button onclick="adjustVariantStock('${key}', '${sz}', 1)" class="w-5 h-5 bg-emerald-100 text-emerald-800 rounded font-black text-xs hover:bg-emerald-200">+</button>
+                                <button onclick="adjustVariantStock('${key}', '${sz}', -1)" class="w-5 h-5 bg-rose-100 text-rose-800 rounded font-black text-xs hover:bg-rose-200">-</button>
+                                <button onclick="openSetQuantityModal('${key}', '${sz}')" class="px-1 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold hover:bg-slate-200" title="Set exact quantity">✏️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-2";
+                card.innerHTML = `
+                    <div class="font-extrabold text-xs text-slate-800 uppercase flex justify-between items-center">
+                        <span>${p.name}</span>
+                        <button onclick="confirmResetProductStock('${key}')" class="text-[10px] text-rose-600 hover:underline font-bold no-print">Clear All</button>
+                    </div>
+                    <div class="grid grid-cols-${Math.min(3, p.sizes.length)} gap-2 text-center text-xs">
+                        ${sizeBoxesHTML}
+                    </div>
+                `;
+                totalsBox.appendChild(card);
+            });
+
+            // Build Dynamic Table Headers matching Image 2
+            const thead = document.getElementById('matrixSpreadsheetHeader');
+            let row1HTML = `<tr class="border-b border-black"><th class="excel-cyan-header p-3 border-r border-black font-black uppercase w-28">date</th>`;
+            let row2HTML = `<tr class="bg-slate-100 text-black border-b-2 border-black font-extrabold"><th class="p-2 border-r border-black"></th>`;
+
+            Object.keys(products).forEach(key => {
+                const p = products[key];
+                row1HTML += `<th colspan="${p.sizes.length}" class="${p.headerClass} p-3 border-r border-black font-black text-sm uppercase">${p.name}</th>`;
+                
+                p.sizes.forEach((sz, idx) => {
+                    const borderClass = (idx === p.sizes.length - 1) ? 'border-r border-black' : 'border-r border-slate-400';
+                    row2HTML += `<th class="p-2 ${borderClass} bg-slate-50">${sz}</th>`;
+                });
+            });
+
+            row1HTML += `<th class="bg-slate-200 p-3 font-black text-black no-print">මකන්න</th></tr>`;
+            row2HTML += `<th class="p-2 bg-slate-200 no-print">Delete</th></tr>`;
+
+            thead.innerHTML = row1HTML + row2HTML;
+
+            // Build Matrix Body Rows
+            const tbody = document.getElementById('matrixTableBody');
+            tbody.innerHTML = '';
+
+            if (appState.matrixLogs.length === 0) {
+                let totalCols = 1;
+                Object.values(products).forEach(p => totalCols += p.sizes.length);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${totalCols + 1}" class="p-8 text-center text-slate-400 font-bold">
+                            දත්ත කිසිවක් නැත. (No Packet Production Logs)<br>
+                            <button onclick="openMatrixLogModal()" class="mt-2 text-brand-600 hover:underline text-xs no-print">+ නිමි පැකට් Log එකක් ඇතුළත් කරන්න</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            appState.matrixLogs.forEach((log, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-200 text-xs";
+                
+                let cellsHTML = `<td class="p-3 border-r border-black font-bold text-slate-700">${log.date}</td>`;
+
+                Object.keys(products).forEach(key => {
+                    const p = products[key];
+                    p.sizes.forEach((sz, idx) => {
+                        const isMatch = log.prodId === key && log.size === sz;
+                        const val = isMatch ? log.qty : '';
+                        const borderClass = (idx === p.sizes.length - 1) ? 'border-r border-black' : 'border-r border-slate-300';
+                        cellsHTML += `<td class="p-3 ${borderClass} font-bold text-slate-800">${val}</td>`;
+                    });
+                });
+
+                cellsHTML += `
+                    <td class="p-3 text-center no-print">
+                        <button onclick="confirmDeleteMatrixLog(${index})" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-lg text-xs shadow-sm">🗑️</button>
+                    </td>
+                `;
+
+                tr.innerHTML = cellsHTML;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function adjustVariantStock(prodKey, variantKey, delta) {
+            if (appState.products[prodKey]) {
+                const current = appState.products[prodKey].stocks[variantKey] || 0;
+                appState.products[prodKey].stocks[variantKey] = Math.max(0, current + delta);
+                pushLog(`Stock updated: ${appState.products[prodKey].name} ${variantKey}`);
+                renderAll();
+                showToast(`Stock updated!`, "info");
+            }
+        }
+
+        function confirmResetProductStock(prodKey) {
+            const p = appState.products[prodKey];
+            requestConfirmation(
+                "නිෂ්පාදන Stock එක 0 කිරීම",
+                `'${p ? p.name : ''}' හි සියලුම පැකට් Stock 0 කිරීමට ඔබට විශ්වාසද?`,
+                function() {
+                    p.sizes.forEach(sz => p.stocks[sz] = 0);
+                    renderAll();
+                    showToast("Stock එක 0 කරන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmClearMatrixLogs() {
+            requestConfirmation(
+                "සියලුම Packing Logs මකා දැමීම",
+                "Matrix වගුවේ ඇති සියලුම Daily Production Log පේළි මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.matrixLogs = [];
+                    renderAll();
+                    showToast("Packing Logs මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmClearAllStocks() {
+            requestConfirmation(
+                "සියලුම Product Stocks 0 කිරීම",
+                "සියලුම නිෂ්පාදන වර්ගවල පැකට් තොග ප්‍රමාණ 0 කිරීමට ඔබට විශ්වාසද?",
+                function() {
+                    Object.keys(appState.products).forEach(k => {
+                        appState.products[k].sizes.forEach(sz => appState.products[k].stocks[sz] = 0);
+                    });
+                    renderAll();
+                    showToast("සියලුම Stocks 0 කරන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmDeleteMatrixLog(index) {
+            requestConfirmation(
+                "Packing Log එක ඉවත් කිරීම",
+                "තෝරාගත් මෙම Daily Packing Log පේළිය මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.matrixLogs.splice(index, 1);
+                    renderAll();
+                    showToast("Log පේළිය මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function openMatrixLogModal() {
+            const selectProd = document.getElementById('mProduct');
+            selectProd.innerHTML = '';
+            Object.keys(appState.products).forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k;
+                opt.innerText = appState.products[k].name;
+                selectProd.appendChild(opt);
+            });
+
+            populateMatrixModalSizes();
+
+            document.getElementById('formMatrixLog').reset();
+            document.getElementById('mDate').value = '03/11/2026';
+            document.getElementById('modalMatrixLog').classList.remove('hidden');
+        }
+
+        function populateMatrixModalSizes() {
+            const prodKey = document.getElementById('mProduct').value;
+            const selectSize = document.getElementById('mVariant');
+            selectSize.innerHTML = '';
+
+            const p = appState.products[prodKey];
+            if (p) {
+                p.sizes.forEach(sz => {
+                    const opt = document.createElement('option');
+                    opt.value = sz;
+                    opt.innerText = sz + ' Pack';
+                    selectSize.appendChild(opt);
+                });
+            }
+        }
+
+        function closeMatrixLogModal() { document.getElementById('modalMatrixLog').classList.add('hidden'); }
+
+        function saveMatrixLog(e) {
+            e.preventDefault();
+            const date = document.getElementById('mDate').value;
+            const prodId = document.getElementById('mProduct').value;
+            const size = document.getElementById('mVariant').value;
+            const qty = parseInt(document.getElementById('mQty').value) || 0;
+
+            if (qty > 0 && appState.products[prodId]) {
+                appState.products[prodId].stocks[size] = (appState.products[prodId].stocks[size] || 0) + qty;
+                appState.matrixLogs.unshift({ id: 'ML-' + Date.now(), date, prodId, size, qty });
+                pushLog(`Packed ${qty} units of ${appState.products[prodId].name} (${size})`);
+                showToast("අලුත් පැකට් ප්‍රමාණයන් එකතු විය!", "success");
+            }
+
+            closeMatrixLogModal();
+            renderAll();
+        }
+
+        // ================= TAB 4: DEHYDRATION ENGINE =================
+        function renderDehydrationTable() {
+            const tbody = document.getElementById('dehydrationTableBody');
+            tbody.innerHTML = '';
+
+            if (appState.dehydrationBatches.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="p-8 text-center text-slate-400 font-bold">
+                            දත්ත කිසිවක් නැත. (No Dehydration Batches)<br>
+                            <button onclick="openDehydrationModal()" class="mt-2 text-brand-600 hover:underline text-xs no-print">+ අලුත් Dehydration Batch එකක් එකතු කරන්න</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            appState.dehydrationBatches.forEach(b => {
+                const isCompleted = b.status === 'COMPLETED';
+                const statusBadge = isCompleted ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100 text-xs";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-mono font-bold text-slate-800">${b.code}</td>
+                    <td class="p-3.5 font-medium text-slate-600">${b.date}</td>
+                    <td class="p-3.5 font-bold text-slate-800">${b.item}</td>
+                    <td class="p-3.5 text-right font-semibold">${b.freshInput} Kg</td>
+                    <td class="p-3.5 text-right font-black text-brand-700">${b.dryOutput} Kg</td>
+                    <td class="p-3.5 text-center font-black text-emerald-600">${b.yield.toFixed(1)}%</td>
+                    <td class="p-3.5 text-center font-black text-amber-600">${b.shrinkage.toFixed(1)}%</td>
+                    <td class="p-3.5 text-center">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${statusBadge}">${b.status}</span>
+                    </td>
+                    <td class="p-3.5 text-center no-print">
+                        <button onclick="confirmDeleteDehydration('${b.id}')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-lg text-xs shadow-sm">🗑️ ඉවත් කරන්න</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function confirmDeleteDehydration(id) {
+            const b = appState.dehydrationBatches.find(x => x.id === id);
+            requestConfirmation(
+                "Batch එක ඉවත් කිරීම",
+                `'${b ? b.code : ''}' (${b ? b.item : ''}) Batch එක මකා දැමීමට ඔබට විශ්වාසද?`,
+                function() {
+                    appState.dehydrationBatches = appState.dehydrationBatches.filter(x => x.id !== id);
+                    pushLog("Deleted a dehydration batch");
+                    renderAll();
+                    showToast("Dehydration batch එක මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function confirmClearDehydrationTable() {
+            requestConfirmation(
+                "සියලුම Dehydration Batches මකා දැමීම",
+                "Dehydration වගුවේ ඇති සියලුම Batch Records මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.dehydrationBatches = [];
+                    renderAll();
+                    showToast("Dehydration වගුව මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function autoCalcDehydrationRatios() {
+            const fresh = parseFloat(document.getElementById('dFreshInput').value) || 0;
+            const dry = parseFloat(document.getElementById('dDryOutput').value) || 0;
+
+            if (fresh > 0 && dry >= 0) {
+                const yieldVal = (dry / fresh) * 100;
+                const shrinkVal = 100 - yieldVal;
+                document.getElementById('lblLiveYield').innerText = yieldVal.toFixed(1) + '%';
+                document.getElementById('lblLiveShrink').innerText = shrinkVal.toFixed(1) + '%';
+            } else {
+                document.getElementById('lblLiveYield').innerText = '0.0%';
+                document.getElementById('lblLiveShrink').innerText = '0.0%';
+            }
+        }
+
+        function openDehydrationModal() {
+            document.getElementById('formDehydration').reset();
+            document.getElementById('dDate').value = '03/11/2026';
+            document.getElementById('modalDehydration').classList.remove('hidden');
+        }
+
+        function closeDehydrationModal() { document.getElementById('modalDehydration').classList.add('hidden'); }
+
+        function saveDehydration(e) {
+            e.preventDefault();
+            const date = document.getElementById('dDate').value;
+            const item = document.getElementById('dItem').value;
+            const freshInput = parseFloat(document.getElementById('dFreshInput').value);
+            const dryOutput = parseFloat(document.getElementById('dDryOutput').value);
+            const status = document.getElementById('dStatus').value;
+
+            const yieldVal = (dryOutput / freshInput) * 100;
+            const shrinkageVal = 100 - yieldVal;
+
+            const code = 'BATCH-' + date.replace(/\//g,'') + '-' + Math.floor(Math.random()*89 + 10);
+            const newId = 'B-' + Date.now();
+            appState.dehydrationBatches.unshift({ id: newId, code, date, item, freshInput, dryOutput, yield: yieldVal, shrinkage: shrinkageVal, status });
+
+            pushLog(`Added Dehydration Batch ${code}`);
+            showToast("අලුත් Batch එකක් ඇතුළත් විය!", "success");
+
+            closeDehydrationModal();
+            renderAll();
+        }
+
+        // ================= TAB 5: MARKET SALES & AUTOMATED STOCK DEDUCTION =================
+        function populateSalesProductsDropdown() {
+            const sProd = document.getElementById('sProduct');
+            if (!sProd) return;
+            sProd.innerHTML = '';
+            
+            Object.keys(appState.products).forEach(prodKey => {
+                const p = appState.products[prodKey];
+                p.sizes.forEach(sz => {
+                    const opt = document.createElement('option');
+                    // Store combined key in format: prodKey|size
+                    opt.value = `${prodKey}|${sz}`;
+                    const avail = p.stocks[sz] || 0;
+                    opt.innerText = `${p.name} - ${sz} (Stock: ${avail} Packs)`;
+                    sProd.appendChild(opt);
+                });
+            });
+
+            updateSalesStockAvailabilityLabel();
+        }
+
+        function updateSalesStockAvailabilityLabel() {
+            const sProdVal = document.getElementById('sProduct').value;
+            const lbl = document.getElementById('sStockAvailInfo');
+            if (!sProdVal || !lbl) return;
+
+            const [prodKey, sz] = sProdVal.split('|');
+            const p = appState.products[prodKey];
+            if (p) {
+                const avail = p.stocks[sz] || 0;
+                lbl.innerText = `Available Live Stock: ${avail} Packs`;
+                if (avail <= 0) {
+                    lbl.className = "mt-1 text-[11px] font-extrabold text-rose-600";
+                } else {
+                    lbl.className = "mt-1 text-[11px] font-extrabold text-emerald-700";
+                }
+            }
+        }
+
+        function renderSalesTable() {
+            const tbody = document.getElementById('salesTableBody');
+            tbody.innerHTML = '';
+
+            const search = document.getElementById('salesSearch') ? document.getElementById('salesSearch').value.toLowerCase() : '';
+            const statusFilter = document.getElementById('salesFilterStatus') ? document.getElementById('salesFilterStatus').value : 'ALL';
+            const isOwner = appState.currentRole === 'owner';
+
+            const filtered = appState.salesOrders.filter(s => {
+                const matchesSearch = s.marketName.toLowerCase().includes(search) || s.invoiceNo.toLowerCase().includes(search) || s.product.toLowerCase().includes(search);
+                const matchesStatus = statusFilter === 'ALL' || s.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="p-8 text-center text-slate-400 font-bold">
+                            දත්ත කිසිවක් නැත. (No Sales Found)<br>
+                            <button onclick="openSalesModal()" class="mt-2 text-brand-600 hover:underline text-xs no-print">+ අලුත් Market Sale එකක් එකතු කරන්න</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(s => {
+                let badgeStyle = 'bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold';
+                if (s.status === 'PARTIAL') badgeStyle = 'bg-amber-100 text-amber-800 border border-amber-300 font-bold';
+                if (s.status === 'PENDING') badgeStyle = 'bg-rose-100 text-rose-800 border border-rose-300 font-extrabold';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100 text-xs";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-mono font-bold text-slate-800">${s.invoiceNo}</td>
+                    <td class="p-3.5 font-medium text-slate-600">${s.date}</td>
+                    <td class="p-3.5 font-extrabold text-slate-800">${s.marketName}</td>
+                    <td class="p-3.5 font-medium">${s.product}</td>
+                    <td class="p-3.5 text-right font-black text-slate-800">${s.qty} Packs</td>
+                    
+                    <td class="p-3.5 text-right font-bold text-slate-800 owner-only-col ${!isOwner ? 'hidden' : ''}">Rs. ${s.totalBill.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="p-3.5 text-right font-black text-emerald-700 owner-only-col ${!isOwner ? 'hidden' : ''}">Rs. ${s.amountReceived.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="p-3.5 text-right font-black text-amber-600 owner-only-col ${!isOwner ? 'hidden' : ''}">Rs. ${s.pendingBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    
+                    <td class="p-3.5 text-center">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] ${badgeStyle}">${s.status}</span>
+                    </td>
+                    <td class="p-3.5 text-center space-x-1 no-print">
+                        <button onclick="openQuickPaymentUpdate('${s.id}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-lg text-xs shadow-sm" title="Receive Cash">+ Pay</button>
+                        <button onclick="confirmDeleteSales('${s.id}')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white font-black rounded-lg text-xs shadow-sm">🗑️ ඉවත් කරන්න</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // DELETING A SALE RETURNS THE SOLD PACKETS BACK TO INVENTORY STOCK
+        function confirmDeleteSales(id) {
+            const s = appState.salesOrders.find(x => x.id === id);
+            requestConfirmation(
+                "Sales Order එක ඉවත් කිරීම",
+                `'${s ? s.invoiceNo : ''}' (${s ? s.marketName : ''}) සටහන මකා දැමීමට ඔබට විශ්වාසද? (විකුණූ පැකට් ${s ? s.qty : 0} ප්‍රමාණය නැවත Stock එකට එකතු වේ)`,
+                function() {
+                    if (s) {
+                        // REPLENISH STOCK AUTOMATICALLY
+                        if (s.prodId && s.size && appState.products[s.prodId]) {
+                            const current = appState.products[s.prodId].stocks[s.size] || 0;
+                            appState.products[s.prodId].stocks[s.size] = current + (parseInt(s.qty) || 0);
+                            pushLog(`Replenished ${s.qty} packs of ${appState.products[s.prodId].name} (${s.size}) back to stock`);
+                        }
+                    }
+
+                    appState.salesOrders = appState.salesOrders.filter(x => x.id !== id);
+                    renderAll();
+                    showToast(`Sales Order එක මකා දැමූ අතර පැකට් ${s ? s.qty : 0} නැවත Stock එකට එකතු විය!`, "info");
+                }
+            );
+        }
+
+        function confirmClearSalesTable() {
+            requestConfirmation(
+                "සියලුම Sales Orders මකා දැමීම",
+                "වෙළඳපොල අලෙවි වගුවේ ඇති සියලුම Sales Orders මකා දැමීමට ඔබට විශ්වාසද?",
+                function() {
+                    appState.salesOrders = [];
+                    renderAll();
+                    showToast("Sales වගුව මකා දමන ලදී!", "warning");
+                }
+            );
+        }
+
+        function autoCalcSalesTotals() {
+            const qty = parseInt(document.getElementById('sPacksQty').value) || 0;
+            const price = parseFloat(document.getElementById('sUnitPrice').value) || 0;
+            const totalBill = qty * price;
+            const received = parseFloat(document.getElementById('sAmountReceived').value) || 0;
+            const pending = Math.max(0, totalBill - received);
+
+            document.getElementById('sTotalBill').value = totalBill ? 'Rs. ' + totalBill.toLocaleString('en-US', {minimumFractionDigits: 2}) : '';
+            document.getElementById('sPendingBalance').value = 'Rs. ' + pending.toLocaleString('en-US', {minimumFractionDigits: 2});
+        }
+
+        function openSalesModal() {
+            populateSalesProductsDropdown();
+            document.getElementById('formSales').reset();
+            document.getElementById('sDate').value = '03/11/2026';
+            document.getElementById('sPacksQty').value = '1';
+            autoCalcSalesTotals();
+            document.getElementById('modalSales').classList.remove('hidden');
+        }
+
+        function closeSalesModal() { document.getElementById('modalSales').classList.add('hidden'); }
+
+        // SAVING SALE AUTOMATICALLY DEDUCTS PACKETS FROM STOCK MATRIX
+        function saveSales(e) {
+            e.preventDefault();
+            const date = document.getElementById('sDate').value;
+            const marketName = document.getElementById('sMarketName').value;
+            const sProdVal = document.getElementById('sProduct').value; // format: prodKey|size
+            const qty = parseInt(document.getElementById('sPacksQty').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('sUnitPrice').value) || 0;
+            const amountReceived = parseFloat(document.getElementById('sAmountReceived').value) || 0;
+
+            if (!sProdVal || qty <= 0) return;
+
+            const [prodKey, size] = sProdVal.split('|');
+            const targetProd = appState.products[prodKey];
+
+            if (!targetProd) {
+                showToast("තෝරාගත් නිෂ්පාදනය හඳුනාගත නොහැකි විය!", "warning");
+                return;
+            }
+
+            const currentStock = targetProd.stocks[size] || 0;
+
+            // DEDUCT PACKET STOCK AUTOMATICALLY
+            targetProd.stocks[size] = Math.max(0, currentStock - qty);
+
+            const totalBill = qty * unitPrice;
+            const pendingBalance = Math.max(0, totalBill - amountReceived);
+
+            let status = 'FULLY_PAID';
+            if (pendingBalance > 0 && amountReceived > 0) status = 'PARTIAL';
+            if (pendingBalance > 0 && amountReceived === 0) status = 'PENDING';
+
+            const invNo = 'INV-' + (1000 + appState.salesOrders.length + 1);
+            const newId = 'S-' + Date.now();
+            const productNameFull = `${targetProd.name} ${size}`;
+
+            appState.salesOrders.unshift({
+                id: newId,
+                invoiceNo: invNo,
+                date,
+                marketName,
+                prodId: prodKey,
+                size: size,
+                product: productNameFull,
+                qty,
+                unitPrice,
+                totalBill,
+                amountReceived,
+                pendingBalance,
+                status
+            });
+
+            pushLog(`Recorded Sale ${invNo}: Deducted ${qty} packs of ${productNameFull}`);
+            
+            if (currentStock < qty) {
+                showToast(`විකිණීම සටහන් විය! (Stock එකේ තිබුණේ පැකට් ${currentStock} යි, Stock එක 0 විය)`, "warning");
+            } else {
+                showToast(`විකිණීම සටහන් විය! පැකට් ${qty} ක් Stock එකෙන් අඩුවිය. (ඉතිරි Stock: ${targetProd.stocks[size]})`, "success");
+            }
+
+            closeSalesModal();
+            renderAll();
+        }
+
+        function openQuickPaymentUpdate(id) {
+            const s = appState.salesOrders.find(x => x.id === id);
+            if (!s) return;
+
+            document.getElementById('payEditId').value = s.id;
+            document.getElementById('payLblInvoice').innerText = s.invoiceNo;
+            document.getElementById('payLblStore').innerText = s.marketName;
+            document.getElementById('payLblPending').innerText = 'Rs. ' + s.pendingBalance.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('payAddAmount').value = '';
+
+            document.getElementById('modalPaymentUpdate').classList.remove('hidden');
+        }
+
+        function closePaymentUpdateModal() { document.getElementById('modalPaymentUpdate').classList.add('hidden'); }
+
+        function saveQuickPaymentUpdate(e) {
+            e.preventDefault();
+            const id = document.getElementById('payEditId').value;
+            const addCash = parseFloat(document.getElementById('payAddAmount').value) || 0;
+
+            const s = appState.salesOrders.find(x => x.id === id);
+            if (s && addCash > 0) {
+                s.amountReceived = parseFloat(s.amountReceived) + addCash;
+                s.pendingBalance = Math.max(0, s.totalBill - s.amountReceived);
+
+                if (s.pendingBalance === 0) s.status = 'FULLY_PAID';
+                else if (s.amountReceived > 0) s.status = 'PARTIAL';
+
+                pushLog(`Received Rs. ${addCash} for ${s.invoiceNo}`);
+                showToast(`Rs. ${addCash} එකතු කරන ලදී!`, "success");
+            }
+
+            closePaymentUpdateModal();
+            renderAll();
+        }
+
+        // ================= LOGS & TOAST HELPERS =================
+        function pushLog(msg) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            appState.activityLogs.unshift(`[${timeStr}] ${msg}`);
+            if (appState.activityLogs.length > 6) appState.activityLogs.pop();
+        }
+
+        function renderActivityLogs() {
+            const container = document.getElementById('dashActivityLog');
+            if(!container) return;
+            container.innerHTML = '';
+            if (appState.activityLogs.length === 0) {
+                container.innerHTML = '<div class="text-slate-400 italic">Logs කිසිවක් නැත.</div>';
+                return;
+            }
+            appState.activityLogs.forEach(log => {
+                const div = document.createElement('div');
+                div.className = "p-2 bg-slate-50 border-l-4 border-brand-500 rounded-r-xl text-slate-700 font-medium";
+                div.innerText = log;
+                container.appendChild(div);
+            });
+        }
+
+        function clearActivityLogs() {
+            appState.activityLogs = [];
+            renderAll();
+            showToast("Activity Logs මකා දමන ලදී!", "info");
+        }
+
+        function showToast(msg, type = 'info') {
+            const box = document.getElementById('toastBox');
+            const toast = document.createElement('div');
+            
+            let color = 'bg-slate-900 text-white';
+            if (type === 'success') color = 'bg-brand-600 text-white shadow-lg';
+            if (type === 'warning') color = 'bg-rose-600 text-white shadow-lg';
+
+            toast.className = `${color} px-4 py-3 rounded-2xl shadow-xl text-xs font-bold transition transform pointer-events-auto flex items-center space-x-2`;
+            toast.innerHTML = `<span>${msg}</span>`;
+
+            box.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function exportProcurementCSV() {
+            let csv = "Date,Supplier Name,Item Name,Fresh Qty,Unit Price,Total Cost,PAID\n";
+            appState.procurementList.forEach(r => {
+                csv += `"${r.date}","${r.supplier}","${r.item}","${r.qty}","${r.unitPrice}","${r.totalCost}","${r.paid}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `Adceylora_Procurement_${new Date().toISOString().slice(0,10)}.csv`);
+            a.click();
+            showToast("CSV ගොනුව ඩවුන්ලෝඩ් විය!", "success");
+        }
+    </script>
+</body>
+</html>
